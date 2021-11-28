@@ -5,6 +5,21 @@ import threading
 import paho.mqtt.client as mqtt
 import os
 import json
+from evdev import UInput, ecodes as e
+
+
+def volume_up(name, timestamp):
+    ui.write(e.EV_KEY, e.KEY_EQUAL, 1)
+    ui.write(e.EV_KEY, e.KEY_EQUAL, 0) 
+    time.sleep(0.2)
+    ui.syn()
+
+def volume_dw(name, timestamp):
+    ui.write(e.EV_KEY, e.KEY_MINUS, 1)
+    ui.write(e.EV_KEY, e.KEY_MINUS, 0) 
+    time.sleep(0.2)
+    ui.syn()
+
 
 def stop_video(name, timestamp):
     print("def stop_video")
@@ -62,9 +77,17 @@ def on_message(client, userdata, msg):
     elif cmd == "stop_video":
         t1 = threading.Thread(target=stop_video, args=(name, value, ))
         t1.start()
+    elif cmd == "volume_up":
+        t1 = threading.Thread(target=volume_up, args=(name, value, ))
+        t1.start()
+    elif cmd == "volume_dw":
+        t1 = threading.Thread(target=volume_dw, args=(name, value, ))
+        t1.start()
 
 
 
+
+ui = UInput()
 
 client = mqtt.Client()
 client.on_connect = on_connect

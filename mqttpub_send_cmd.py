@@ -19,7 +19,7 @@ try:
     value = sys.argv[3]
 except:
     #value = 0
-    value = str(int(time.time() + 5))
+    value = str(int(time.time() + 3))
     #t = str(int(time.time() + 5))
 
 
