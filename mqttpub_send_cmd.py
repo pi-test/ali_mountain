@@ -2,21 +2,40 @@
 
 import time
 import json
+import sys
 import paho.mqtt.client as mqtt
+
+try:
+    cmd = sys.argv[1]
+except:
+    cmd = "play_video"
+
+try:
+    name = sys.argv[2]
+except:
+    name = "/home/pi/xplay/autotest/yiyezi.mp4"
+
+try:
+    value = sys.argv[3]
+except:
+    #value = 0
+    value = str(int(time.time() + 5))
+    #t = str(int(time.time() + 5))
+
 
 host = "localhost"
 topic = "foo/bar"
 
-t = str(int(time.time() + 5))
-payload = t
+#payload = t
 #payload = [{"time":t}]
-print(t, type(payload), payload)
+
+payload = [{"cmd":cmd, "name":name, "value":value}]
+print(value, type(payload), payload)
 #print(type(json.loads(payload)), json.loads(payload))
 
 print(int(time.time()))
-#print("t = ", t)
-print("topic: {}, message: {}".format(topic, payload))
-#print("topic: {}, message: {}".format(topic, json.dumps(payload)))
+#print("topic: {}, message: {}".format(topic, payload))
+print("topic: {}, message: {}".format(topic, json.dumps(payload)))
 
 client = mqtt.Client()
 client.connect(host, 1883, 60)
